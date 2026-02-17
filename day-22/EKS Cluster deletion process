@@ -1,0 +1,37 @@
+# step1
+# Delete Kubernetes Services with LoadBalancers
+kubectl get svc --all-namespaces  
+kubectl delete svc <service-name>
+
+# Delete Ingress Resources
+kubectl get ingress --all-namespaces  
+kubectl delete ingress <ingress-name>
+
+# Option A — Using eksctl (Easiest)
+eksctl delete cluster --name <cluster-name> --region <your-region>
+eksctl delete cluster --name my-eks-cluster --region ap-south-1
+# This command will delete the cluster and the managed node groups it created.
+
+#Option B — Using the AWS Console
+
+#Go to the AWS EKS Console
+#Select the cluster you want to delete.
+#First delete Managed Node Groups and Fargate Profiles (Compute tab).
+#Then choose Delete Cluster and confirm.
+#Note: If deletion protection is enabled on the cluster, you’ll need to disable that first in the console before deleting.
+
+# Option C — Using AWS CLI
+# 1) List and remove Managed Node Groups
+aws eks list-nodegroups --cluster-name my-cluster
+aws eks delete-nodegroup \
+  --cluster-name my-cluster \
+  --nodegroup-name my-nodegroup
+# 2) List and delete Fargate profiles
+aws eks list-fargate-profiles --cluster-name my-cluster
+aws eks delete-fargate-profile \
+  --cluster-name my-cluster \
+  --fargate-profile-name my-profile
+
+# 3) Delete the EKS cluster
+aws eks delete-cluster --name my-cluster
+
